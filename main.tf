@@ -1,23 +1,6 @@
-terraform {
-  required_version = ">= 0.11.1"
-}
-
-variable "gcp_credentials" {
-  description = "GCP credentials needed by google provider"
-}
-
-variable "gcp_project" {
-  description = "GCP project name"
-}
-
 variable "gcp_region" {
   description = "GCP region, e.g. us-east1"
   default = "us-east1"
-}
-
-variable "gcp_zone" {
-  description = "GCP zone, e.g. us-east1-a"
-  default = "us-east1-b"
 }
 
 variable "machine_type" {
@@ -31,20 +14,28 @@ variable "instance_name" {
 }
 
 variable "image" {
-  description = "image to build instance from"
-  default = "debian-cloud/debian-8"
+  description = "image to build instance from in the format: image-family/os. See: https://cloud.google.com/compute/docs/images#os-compute-support"
+  default = "ubuntu-os-cloud/ubuntu-1404-lts"
+}
+
+variable "startup_script_file_path" {
+  description = "A startup script passed as metadata"
+  default = "startup-script.sh"
 }
 
 provider "google" {
-  credentials = "${var.gcp_credentials}"
-  project     = "${var.gcp_project}"
+  # Google provider configured via Environment variables: GOOGLE_CREDENTIALS, GOOGLE_PROJECT and Terraform variable: TF_VAR_gcp_region
   region      = "${var.gcp_region}"
+}
+
+data "template_file" "startup_script" {
+  template = "${file(var.startup_script_file_path)}"
 }
 
 resource "google_compute_instance" "demo" {
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
-  zone         = "${var.gcp_zone}"
+  zone         = "${var.gcp_region}-b"
 
   boot_disk {
     initialize_params {
@@ -59,7 +50,8 @@ resource "google_compute_instance" "demo" {
       // Ephemeral IP
     }
   }
-
+ 
+  metadata_startup_script = "${data.template_file.startup_script.rendered}"
 }
 
 output "external_ip"{
