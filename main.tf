@@ -1,3 +1,12 @@
+variable "labels" {
+  type = "map"
+  default = {
+    environment = "demo"
+    app = "demo"
+    ttl = "24h"
+  }
+}
+
 variable "gcp_region" {
   description = "GCP region, e.g. us-east1"
   default = "us-east1"
@@ -36,6 +45,7 @@ resource "google_compute_instance" "demo" {
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
   zone         = "${var.gcp_region}-b"
+  labels       = "${var.labels}"
 
   boot_disk {
     initialize_params {
