@@ -12,4 +12,5 @@ module "gcp-centos-server" {
   instance_name="centos-server-example"
   startup_script_file_path="centos-lamp.sh"
   image="centos-cloud/centos-7"
+  os_pd_ssd_size = "12"
 }
