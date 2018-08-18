@@ -1,4 +1,4 @@
-# Provision a compute instance in GCP
+# Provision a compute instance in GCP with SSD Persistent Disk 
 This Terraform configuration provisions a compute instance in Google Cloud Platform.
 
 ### Notes:
