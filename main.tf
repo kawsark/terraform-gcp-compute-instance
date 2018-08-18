@@ -34,4 +34,5 @@ resource "google_compute_disk" "os-disk" {
   image  = "${var.image}"
   labels = "${var.labels}"
   size   = "${var.os_pd_ssd_size}"
+  zone   = "${var.gcp_region}-b"
 }
