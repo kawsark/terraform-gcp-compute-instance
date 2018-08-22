@@ -1,3 +1,7 @@
+variable "gcp_credentials" {
+  description = "GCP credentials needed by google provider"
+}
+
 variable "labels" {
   type = "map"
   default = {
@@ -30,10 +34,5 @@ variable "instance_name" {
 variable "image" {
   description = "image to build instance from in the format: image-family/os. See: https://cloud.google.com/compute/docs/images#os-compute-support"
   default = "ubuntu-os-cloud/ubuntu-1404-lts"
-}
-
-variable "startup_script_file_path" {
-  description = "A startup script passed as metadata"
-  default = "startup-script.sh"
 }
 

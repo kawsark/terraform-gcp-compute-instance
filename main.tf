@@ -1,10 +1,7 @@
 provider "google" {
-  # Google provider configured via Environment variables: GOOGLE_CREDENTIALS, GOOGLE_PROJECT and Terraform variable: TF_VAR_gcp_region
+  # Google project configured via Environment variable: GOOGLE_PROJECT
+  credentials = "${var.gcp_credentials}"
   region      = "${var.gcp_region}"
-}
-
-data "template_file" "startup_script" {
-  template = "${file(var.startup_script_file_path)}"
 }
 
 resource "google_compute_instance" "demo" {
@@ -25,7 +22,6 @@ resource "google_compute_instance" "demo" {
     }
   }
  
-  metadata_startup_script = "${data.template_file.startup_script.rendered}"
 }
 
 resource "google_compute_disk" "os-disk" {
