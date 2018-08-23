@@ -4,6 +4,10 @@ provider "google" {
   region      = "${var.gcp_region}"
 }
 
+resource null_resource "test" {
+
+}
+
 resource "google_compute_instance" "demo" {
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
