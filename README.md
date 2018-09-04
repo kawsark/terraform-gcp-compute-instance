@@ -1,4 +1,4 @@
-# Provision a compute instance in GCP with SSD Persistent Disk 
+# Provision a compute instance in GCP with SSD Persistent Disk and a startup script
 This Terraform configuration provisions a compute instance in Google Cloud Platform.
 
 ### Notes:
@@ -6,3 +6,4 @@ This Terraform configuration provisions a compute instance in Google Cloud Platf
 - You need to set provide your GCP credentials in the gcp_credentials variable.  
 - This configuration can also be used as a module as shown under examples:  
   - [example-centos-lamp-server](examples/example-centos-lamp-server/)
+  - [ubuntu-vault-server](examples/examples/vault-ubuntu-server/)

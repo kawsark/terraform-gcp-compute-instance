@@ -1,7 +1,11 @@
 provider "google" {
-  # Google project configured via Environment variable: GOOGLE_PROJECT
-  credentials = "${var.gcp_credentials}"
-  region      = "${var.gcp_region}"
+  region       = "${var.gcp_region}"
+  credentials  = "${var.gcp_credentials}"
+  project      = "${var.gcp_project}"
+}
+
+data "template_file" "startup_script" {
+  template = "${file(var.startup_script_file_path)}"
 }
 
 resource "google_compute_instance" "demo" {
@@ -22,6 +26,7 @@ resource "google_compute_instance" "demo" {
     }
   }
  
+  metadata_startup_script = "${data.template_file.startup_script.rendered}"
 }
 
 resource "google_compute_disk" "os-disk" {
