@@ -29,8 +29,16 @@ resource "google_compute_instance" "demo" {
   metadata_startup_script = "${data.template_file.startup_script.rendered}"
 }
 
+resource "random_string" "random-identifier" {
+  length = 4
+  special = false
+  upper = false
+  lower = true
+  number = true
+}
+
 resource "google_compute_disk" "os-disk" {
-  name   = "os-disk"
+  name   = "os-disk-${random_string.random-identifier}"
   type   = "pd-ssd"
   image  = "${var.image}"
   labels = "${var.labels}"
