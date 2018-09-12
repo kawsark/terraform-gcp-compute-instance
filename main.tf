@@ -38,7 +38,7 @@ resource "random_string" "random-identifier" {
 }
 
 resource "google_compute_disk" "os-disk" {
-  name   = "os-disk-${random_string.random-identifier}"
+  name   = "os-disk-${random_string.random-identifier.result}"
   type   = "pd-ssd"
   image  = "${var.image}"
   labels = "${var.labels}"
