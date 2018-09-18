@@ -9,6 +9,12 @@ variable "gcp_project" {
   description = "Name of GCP project"
 }
 
+data "template_file" "startup_script" {
+  template = "${file("${path.module}/centos-lamp.sh.tpl")}"
+
+  vars{}
+}
+
 module "gcp-centos-server" {
   source = "github.com/kawsark/terraform-gcp-compute-instance"
   labels  = {
@@ -20,7 +26,7 @@ module "gcp-centos-server" {
   gcp_project="${var.gcp_project}"
   gcp_region="us-east1"
   instance_name="centos-server-example"
-  startup_script_file_path="centos-lamp.sh"
+  startup_script = "${data.template_file.startup_script.rendered}"
   image="centos-cloud/centos-7"
   os_pd_ssd_size = "12"
 }

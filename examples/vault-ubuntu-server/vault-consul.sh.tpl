@@ -4,10 +4,10 @@
 echo "Installing dependencies ..."
 sudo apt-get update
 sudo apt-get install -y git unzip curl jq dnsutils
-echo "Fetching Consul version 1.2.2 ..."
+echo "Fetching Consul version ${CONSUL_VERSION} ..."
 cd /tmp/
-curl -s https://releases.hashicorp.com/consul/1.2.2/consul_1.2.2_linux_amd64.zip -o consul.zip
-echo "Installing Consul version 1.2.2 ..."
+curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
+echo "Installing Consul version ${CONSUL_VERSION} ..."
 unzip consul.zip
 sudo chmod +x consul
 sudo mv consul /usr/bin/consul
@@ -56,7 +56,7 @@ systemctl enable consul.service
 systemctl start consul.service
 
 # Install Vault
-curl -s https://releases.hashicorp.com/vault/0.11.1/vault_0.11.1_linux_amd64.zip -o vault.zip
+curl -s https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -o vault.zip
 unzip vault.zip
 sudo chmod +x vault
 sudo mv vault /usr/local/bin/vault

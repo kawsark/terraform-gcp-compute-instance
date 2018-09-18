@@ -9,6 +9,24 @@ variable "gcp_project" {
   description = "Name of GCP project"
 }
 
+variable "vault_version" {
+  description = "Version of Vault binary to download"
+  default = "0.11.1" 
+}
+
+variable "consul_version" {
+  description = "Version of Consul binary to download"
+  default = "1.2.2"
+}
+
+data "template_file" "startup_script" {
+  template = "${file("${path.module}/vault-consul.sh.tpl")}"
+  vars{
+	CONSUL_VERSION = "${var.consul_version}"
+	VAULT_VERSION = "${var.vault_version}"
+  }
+}
+
 module "gcp-ubuntu-server" {
   source = "github.com/kawsark/terraform-gcp-compute-instance"
   labels  = {
@@ -20,7 +38,7 @@ module "gcp-ubuntu-server" {
   gcp_project="${var.gcp_project}"
   gcp_region="us-east1"
   instance_name="vault-ubuntu-server"
-  startup_script_file_path="vault-consul.sh"
+  startup_script = "${data.template_file.startup_script.rendered}"
   image="ubuntu-os-cloud/ubuntu-1604-lts"
   os_pd_ssd_size = "12"
 }
