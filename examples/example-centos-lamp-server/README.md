@@ -3,14 +3,21 @@ Example showing how to use terraform-gcp-compute-instance module to provision a 
 An example startup-script is added here for CentOS
 
 ### Steps:
-- Set environment variables:
+- Set variables:
 ```
-export GOOGLE_CREDENTIALS="path/to/credentials/file"
-export GOOGLE_PROJECT="gcp-project-name"
+export TF_VAR_gcp_credentials="path/to/credentials/file"
+export TF_VAR_gcp_project="gcp-project-name"
 ```
-
-- Terraform:
+- Run terraform commands:
 ```
+terraform init
+terraform get -update=true
 terraform plan
 terraform apply
+```
+- Cleanup:
+```
+terraform destroy
+unset TF_VAR_gcp_credentials
+unset TF_VAR_gcp_project
 ```
