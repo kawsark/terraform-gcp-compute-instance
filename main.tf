@@ -4,10 +4,6 @@ provider "google" {
   project      = "${var.gcp_project}"
 }
 
-data "template_file" "startup_script" {
-  template = "${file(var.startup_script_file_path)}"
-}
-
 resource "google_compute_instance" "demo" {
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
@@ -26,7 +22,7 @@ resource "google_compute_instance" "demo" {
     }
   }
  
-  metadata_startup_script = "${data.template_file.startup_script.rendered}"
+  metadata_startup_script = "${var.startup_script}"
 }
 
 resource "random_string" "random-identifier" {

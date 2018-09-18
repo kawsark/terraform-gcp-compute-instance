@@ -40,8 +40,8 @@ variable "image" {
   default = "ubuntu-os-cloud/ubuntu-1404-lts"
 }
 
-variable "startup_script_file_path" {
+variable "startup_script" {
   description = "A startup script passed as metadata"
-  default = "startup-script.sh"
+  default = "touch /tmp/default_startup_script"
 }
 
