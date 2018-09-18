@@ -24,7 +24,9 @@ terraform output -module=gcp-ubuntu-server -json | jq -r .external_ip.value > /t
 gcloud compute firewall-rules create vault-api-addr --allow tcp:8200
 gcloud compute firewall-rules create consul-ui-addr --allow tcp:8500
 export VAULT_ADDR="http://$(cat /tmp/gcp_vault_ip):8200"
+export CONSUL_HTTP_ADDR="http://$(cat /tmp/gcp_vault_ip):8500"
 export VAULT_TOKEN="$(cat /tmp/gcp_vault_root_token)"
+consul catalog services
 vault status
 ``` 
 - Cleanup:
