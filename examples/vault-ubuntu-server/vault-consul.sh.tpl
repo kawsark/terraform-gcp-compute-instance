@@ -2,7 +2,7 @@
 
 #Install Consul and dependencies
 echo "Installing dependencies ..."
-sudo apt-get update
+sudo apt-get update -y
 sudo apt-get install -y git unzip curl jq dnsutils
 echo "Fetching Consul version ${CONSUL_VERSION} ..."
 cd /tmp/
@@ -40,7 +40,7 @@ sudo cat <<EOF > /etc/consul.d/consul.json
   "node_name": "n1",
   "server": true,
   "bootstrap_expect": 1,
-  "enable_script_checks": true,
+  "enable_script_checks": false,
   "bind_addr": "0.0.0.0",
   "client_addr": "0.0.0.0",
   "connect": {
