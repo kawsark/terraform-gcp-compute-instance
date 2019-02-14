@@ -45,3 +45,6 @@ variable "startup_script" {
   default = "touch /tmp/default_startup_script"
 }
 
+variable "enc_key_self_link" {
+   type = "list"
+}

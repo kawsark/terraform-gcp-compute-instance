@@ -1,4 +1,5 @@
 provider "google" {
+  version      = "~> 2.0.0"
   region       = "${var.gcp_region}"
   credentials  = "${var.gcp_credentials}"
   project      = "${var.gcp_project}"
@@ -12,6 +13,10 @@ resource "google_compute_instance" "demo" {
 
   boot_disk {
     source = "${google_compute_disk.os-disk.name}"
+  }
+
+  attached_disk {
+    source = "${google_compute_disk.data-disk.name}"
   }
 
   network_interface {
@@ -40,4 +45,14 @@ resource "google_compute_disk" "os-disk" {
   labels = "${var.labels}"
   size   = "${var.os_pd_ssd_size}"
   zone   = "${var.gcp_region}-b"
+}
+
+resource "google_compute_disk" "data-disk" {
+  name   = "data-disk-${random_string.random-identifier.result}"
+  type   = "pd-ssd"
+  image  = "${var.image}"
+  labels = "${var.labels}"
+  size   = "${var.os_pd_ssd_size}"
+  zone   = "${var.gcp_region}-b"
+  disk_encryption_key = "${var.enc_key_self_link}"
 }
