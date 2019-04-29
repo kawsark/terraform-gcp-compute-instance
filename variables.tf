@@ -1,3 +1,6 @@
+variable "server_count" {
+  default = 1
+}
 variable "labels" {
   type = "map"
   default = {

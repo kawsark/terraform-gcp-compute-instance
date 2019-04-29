@@ -5,6 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "demo" {
+  count        = "${var.server_count}"
   name         = "${var.instance_name}"
   machine_type = "${var.machine_type}"
   zone         = "${var.gcp_region}-b"
