@@ -31,7 +31,7 @@ variable "gcp_project" {
 
 variable "machine_type" {
   description = "GCP machine type"
-  default = "n1-standard-1"
+  default = "n1-standard-2"
 }
 
 variable "instance_name" {
