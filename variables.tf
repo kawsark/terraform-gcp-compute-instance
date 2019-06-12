@@ -36,7 +36,7 @@ variable "machine_type" {
 
 variable "instance_name" {
   description = "GCP instance name"
-  default = "demo"
+  default = "terraform-demo"
 }
 
 variable "image" {
