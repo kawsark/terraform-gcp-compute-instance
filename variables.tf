@@ -7,7 +7,7 @@ variable "labels" {
   default = {
     environment = "demo"
     app = "demo"
-    ttl = "24"
+    ttl = "48"
   }
 }
 
