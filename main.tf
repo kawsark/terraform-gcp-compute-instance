@@ -12,7 +12,7 @@ resource "google_compute_instance" "demo" {
   labels       = "${var.labels}"
 
   boot_disk {
-    source = "${google_compute_disk.os-disk.count.index.name}"
+    source = "${google_compute_disk.os-disk}.${count.index}.name"
   }
 
   network_interface {
