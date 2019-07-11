@@ -8,6 +8,7 @@ variable "labels" {
     environment = "demo"
     app = "demo"
     ttl = "48"
+    owner= "kawsar"
   }
 }
 
