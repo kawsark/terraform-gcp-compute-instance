@@ -21,10 +21,6 @@ variable "gcp_region" {
   default = "us-east1"
 }
 
-variable "gcp_credentials" {
-  description = "Contents of GCP service account .json file"
-}
-
 variable "gcp_project" {
   description = "Name of GCP project"
 }
