@@ -7,7 +7,7 @@ variable "labels" {
   default = {
     environment = "demo"
     app = "demo"
-    ttl = "48"
+    ttl = "24h"
     owner= "kawsar"
   }
 }
