@@ -38,7 +38,7 @@ resource "google_compute_disk" "os-disk" {
   name   = "os-disk-${random_string.random-identifier.result}-${count.index}"
   type   = "pd-ssd"
   image  = "${var.image}"
-  labels = "${var.labels}"
+  #labels = "${var.labels}"
   size   = "${var.os_pd_ssd_size}"
   zone   = "${var.gcp_region}-b"
 }
