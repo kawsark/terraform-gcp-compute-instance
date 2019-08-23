@@ -3,12 +3,24 @@ provider "google" {
   project      = "${var.gcp_project}"
 }
 
+data "google_compute_zones" "available" {
+  region = "${var.gcp_region}"
+  project = "${var.gcp_project}"
+}
+
+data "google_compute_default_service_account" "default" { }
+
+output "default_account" {
+  value = "${data.google_compute_default_service_account.default.email}"
+}
+
 resource "google_compute_instance" "demo" {
   count        = "${var.server_count}"
   name         = "${var.instance_name}-${count.index}"
   machine_type = "${var.machine_type}"
-  zone         = "${var.gcp_region}-b"
+  zone         = "${data.google_compute_zones.available.names[count.index]}"
   labels       = "${var.labels}"
+  tags	       = "${var.tags}"
 
   boot_disk {
     source = "${element(google_compute_disk.os-disk.*.name, count.index)}"
@@ -21,6 +33,13 @@ resource "google_compute_instance" "demo" {
       // Ephemeral IP
     }
   }
+
+  service_account = {
+    email =  "${var.use_default_service_account ? "${data.google_compute_default_service_account.default.email}" : "${var.service_account_email}" }"
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  allow_stopping_for_update = "true"
  
   metadata_startup_script = "${var.startup_script}"
 }
@@ -38,8 +57,8 @@ resource "google_compute_disk" "os-disk" {
   name   = "os-disk-${random_string.random-identifier.result}-${count.index}"
   type   = "pd-ssd"
   image  = "${var.image}"
-  #labels = "${var.labels}"
+  labels = "${var.labels}"
   size   = "${var.os_pd_ssd_size}"
-  zone   = "${var.gcp_region}-b"
+  zone   = "${data.google_compute_zones.available.names[count.index]}"
 }
 

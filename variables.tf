@@ -2,6 +2,10 @@ variable "server_count" {
   default = 1
 }
 
+variable "tags" {
+  default = ["demo","terraform"]
+}
+
 variable "labels" {
   type = "map"
   default = {
@@ -46,3 +50,12 @@ variable "startup_script" {
   default = "touch /tmp/default_startup_script"
 }
 
+variable "use_default_service_account" {
+  description = "If set to 1, it will attach the default compute service account to instance."
+  default = 1
+}
+
+variable "service_account_email" {
+  description = "If using a non-default service account, then set the email here"
+  default = "my-service-acct@my-project.iam.gserviceaccount.com"
+}

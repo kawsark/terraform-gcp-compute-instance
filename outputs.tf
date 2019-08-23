@@ -6,3 +6,6 @@ output "internal_ip" {
    value = "${google_compute_instance.demo.*.network_interface.0.network_ip}"
 }
 
+output "id" {
+  value = "${google_compute_instance.demo.*.instance_id}"
+}
