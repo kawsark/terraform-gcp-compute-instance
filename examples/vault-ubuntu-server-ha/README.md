@@ -1,4 +1,4 @@
-## vault-ubuntu-server-ha
+## vault-server-ha
 This is an example showing how to use `terraform-gcp-compute-instance` module to provision a Vault and Consul cluster.
 **Important:** This code does not implement all of the [Vault production hardening recommendations](https://learn.hashicorp.com/vault/operations/production-hardening) and therefore should not be used in production.
 
@@ -15,7 +15,6 @@ gcloud compute firewall-rules update allow-all-bastion --source-ranges="<bastion
 - Startup scripts are in the [scripts](scripts/) directory. Vault will be initialized and the root token will be placed at `/opt/vault/root_token` for one of the Vault nodes (whichever proceeds to initialize first).
 
 ### TODO: 
-- Implement on CentOS 7
 - Implement Consul ACL tokens
 - Provision 3 non-voting consul nodes using Availability Zones and take advantage of Consul Enterprise auto-pilot feature. This can be achieved by duplicating the consul-cluster module and adjusting userdata.
 - Upgrade this code to terraform 0.12. Currently we are using the []() module to generate self-signed TLS which needs to be updated first.

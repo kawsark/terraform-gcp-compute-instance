@@ -5,9 +5,20 @@ echo "~~~~~~~ Consul startup script - begin ~~~~~~~"
 export PATH="$${PATH}:/usr/local/bin"
 export local_ip="$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)"
 
+# Install pre-reqs
+# TODO: figure out better OS detection logic
+if [  -n "$(uname -a | grep -i Ubuntu)" ]; then
+    echo "Proceeding as Ubuntu install"
+    apt-get update -y
+    apt install curl unzip -y
+else
+    echo "Proceeding as Redhat/CentOS install"
+    yum update -y
+    yum install curl unzip -y
+fi  
+
 # Download consul
 echo "Downloading consul"
-apt install curl unzip -y
 cd /tmp
 curl "${consul_url}" -o consul.zip
 unzip consul.zip
@@ -31,6 +42,8 @@ cat <<EOF > /etc/systemd/system/consul.service
 Description=consul agent
 Requires=network-online.target
 After=network-online.target
+[Install]
+WantedBy=multi-user.target
 [Service]
 Restart=always
 RestartSec=15s
@@ -39,8 +52,6 @@ Group=consul
 ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
-[Install]
-WantedBy=multi-user.target
 EOF
 
 echo "Writing certs to TLS directories"

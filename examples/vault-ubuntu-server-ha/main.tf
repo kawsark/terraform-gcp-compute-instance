@@ -6,6 +6,7 @@ provider "google" {
 module "consul-cluster" {
   #source = "github.com/kawsark/terraform-gcp-compute-instance"
   source = "../../"
+  image = "${var.image}"
 
   tags = ["consul-${var.gcp_project}-${var.consul_dc}"]
 
@@ -24,13 +25,13 @@ module "consul-cluster" {
   use_default_service_account = 0
   service_account_email="${data.google_compute_default_service_account.default.email}"
   startup_script = "${data.template_file.consul_userdata.rendered}"
-  image="ubuntu-os-cloud/ubuntu-1604-lts"
   os_pd_ssd_size = "12"
 }
 
 module "vault" {
   #source = "github.com/kawsark/terraform-gcp-compute-instance"
   source = "../../"
+  image = "${var.image}"
 
   tags = ["consul-${var.gcp_project}-${var.consul_dc}"]
 
@@ -50,6 +51,5 @@ module "vault" {
   use_default_service_account = 0
   service_account_email="${data.google_compute_default_service_account.default.email}"
   startup_script = "${data.template_file.vault_userdata.rendered}"
-  image="ubuntu-os-cloud/ubuntu-1604-lts"
   os_pd_ssd_size = "12"
 }

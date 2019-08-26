@@ -27,6 +27,11 @@ variable "consul_url" {
   default = "https://releases.hashicorp.com/consul/1.5.3/consul_1.5.3_linux_amd64.zip"
 }
 
+variable "image" {
+  description = "An OS image to provision: https://cloud.google.com/compute/docs/images#os-compute-support"
+  default = "ubuntu-os-cloud/ubuntu-1604-lts"
+}
+
 variable "owner" {
   default = "demouser"
 }

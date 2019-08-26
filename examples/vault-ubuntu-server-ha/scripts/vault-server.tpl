@@ -5,6 +5,18 @@ echo "~~~~~~~ Vault startup script - begin ~~~~~~~"
 export PATH="$${PATH}:/usr/local/bin"
 export local_ip="$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)"
 
+# Install pre-reqs
+# TODO: figure out better OS detection logic
+if [  -n "$(uname -a | grep -i Ubuntu)" ]; then
+    echo "Proceeding as Ubuntu install"
+    apt-get update -y
+    apt install curl unzip -y
+else
+    echo "Proceeding as Redhat/CentOS install"
+    yum update -y
+    yum install curl unzip -y
+fi  
+
 # Download vault and consul
 echo "Downloading consul and vault"
 apt install curl unzip -y
@@ -37,6 +49,8 @@ cat <<EOF > /etc/systemd/system/consul.service
 Description=consul agent
 Requires=network-online.target
 After=network-online.target
+[Install]
+WantedBy=multi-user.target
 [Service]
 Restart=always
 RestartSec=15s
@@ -45,8 +59,6 @@ Group=consul
 ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
-[Install]
-WantedBy=multi-user.target
 EOF
 
 echo "Writing certs to TLS directories"
@@ -76,6 +88,8 @@ cat <<EOF > /etc/systemd/system/vault.service
 Description=Vault Agent
 Requires=consul.service
 After=consul.service
+[Install]
+WantedBy=multi-user.target
 [Service]
 Restart=on-failure
 PermissionsStartOnly=true
@@ -86,8 +100,6 @@ KillSignal=SIGTERM
 User=vault
 Group=vault
 LimitMEMLOCK=infinity
-[Install]
-WantedBy=multi-user.target
 EOF
 
 echo "Write certs to TLS directories"
@@ -178,7 +190,7 @@ listener "tcp" {
 
 storage "consul" {
   address = "https://127.0.0.1:8501"
-  path    = "${dc}-vault/"
+  path    = "vault-${dc}/"
 
   tls_ca_file   = "$${CONSUL_TLS_DIR}/consul-ca.crt"
   tls_cert_file = "$${CONSUL_TLS_DIR}/consul.crt"
