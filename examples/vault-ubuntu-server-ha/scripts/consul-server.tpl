@@ -65,7 +65,7 @@ cat <<EOF | sudo tee "$${CONSUL_TLS_DIR}/consul.key"
 ${leaf_key}
 EOF
 
-cat <<EOF > "$${CONSUL_CONFIG_DIR}/server.hcl"
+cat <<-EOF > "$${CONSUL_CONFIG_DIR}/server.hcl"
 datacenter = "${dc}"
 data_dir = "$${CONSUL_DATA_DIR}"
 bind_addr = "$${local_ip}"
@@ -85,6 +85,15 @@ verify_incoming_https = false
 ports = {
     http = -1,
     https = 8501
+}
+EOF
+
+# Bootstrap ACL tokens
+cat <<-EOF > $${CONSUL_CONFIG_DIR}/acl.hcl
+acl = {
+  enabled = true,
+  default_policy = "allow",
+  enable_token_persistence = true
 }
 EOF
 
@@ -136,16 +145,5 @@ cat <<PROFILE | sudo tee /etc/profile.d/consul.sh
 export CONSUL_HTTP_ADDR="https://127.0.0.1:8501"
 export CONSUL_CACERT="$${CONSUL_TLS_DIR}/consul-ca.crt"
 PROFILE
-
-# Bootstrap ACL tokens
-#cat <<EOF > $${CONSUL_CONFIG_DIR}/agent.hcl
-#{
-#  acl = {
-#    enabled = true,
-#    default_policy = "allow",
-#    enable_token_persistence = true
-#  }
-#}
-#EOF
 
 echo "~~~~~~~ Consul startup script - end ~~~~~~~"

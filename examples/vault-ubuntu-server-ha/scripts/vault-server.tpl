@@ -44,7 +44,7 @@ mkdir -p $${CONSUL_DATA_DIR}
 mkdir -p $${CONSUL_TLS_DIR}
 
 echo "Writing consul systemd unit file"
-cat <<EOF > /etc/systemd/system/consul.service
+cat <<-EOF > /etc/systemd/system/consul.service
 [Unit]
 Description=consul agent
 Requires=network-online.target
@@ -59,6 +59,15 @@ Group=consul
 ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
+EOF
+
+# Bootstrap ACL tokens
+cat <<-EOF > $${CONSUL_CONFIG_DIR}/acl.hcl
+acl = {
+  enabled = true,
+  default_policy = "allow",
+  enable_token_persistence = true
+}
 EOF
 
 echo "Writing certs to TLS directories"

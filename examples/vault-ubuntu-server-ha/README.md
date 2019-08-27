@@ -14,12 +14,11 @@ gcloud compute firewall-rules update allow-all-bastion --source-ranges="<bastion
 
 - Startup scripts are in the [scripts](scripts/) directory. Vault will be initialized and the root token will be placed at `/opt/vault/root_token` for one of the Vault nodes (whichever proceeds to initialize first).
 
-### TODO: 
-- Implement Consul ACL tokens
+### TODO
 - Provision 3 non-voting consul nodes using Availability Zones and take advantage of Consul Enterprise auto-pilot feature. This can be achieved by duplicating the consul-cluster module and adjusting userdata.
 - Upgrade this code to terraform 0.12. Currently we are using the []() module to generate self-signed TLS which needs to be updated first.
 
-### Steps:
+### Provisioning steps
 1. Set required variables
 ```
 # Note: please remove all new line characters from Google service account .json file
@@ -52,7 +51,43 @@ cat /opt/vault/vault.txt
 export VAULT_TOKEN="root-token"
 vault status
 ``` 
-- Cleanup:
+
+### (Optional) ACL steps
+This repo includes 3 scripts to enable Consul ACL tokens with a default deny policy. The manual steps to run them are shown below. These can potentially be automated via Configuration management.
+
+- Run the [0_acl_bootstrap.sh](scripts/0_acl_bootstrap.sh) script on the consul-0 node. Example commands are below. This will bootstrap the ACL system, create 3 policies, and provide the bootstrap ACL token.
+```
+gcloud compute --project "<project-name>" ssh --zone "us-east1-b" "consul-0"
+./0_acl_bootstrap.sh
+```
+
+- Run the [1_acl_consul.sh](scripts/1_acl_consul.sh) script on the remaining Consul server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
+```
+# consul-1 server
+gcloud compute --project "<project-name>" ssh --zone "us-east1-c" "consul-1"
+export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
+./1_acl_consul.sh
+
+# consul-2 server
+gcloud compute --project "<project-name>" ssh --zone "us-east1-d" "consul-2"
+export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
+./1_acl_consul.sh
+```
+
+- Run the [2_acl_vault.sh](scripts/2_acl_vault.sh) script on Vault server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
+```
+# vault-0 server
+gcloud compute --project "<project-name>" ssh --zone "us-east1-b" "vault-0"
+export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
+./1_acl_vault.sh
+
+# vault-1 server
+gcloud compute --project "<project-name>" ssh --zone "us-east1-c" "vault-1"
+export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
+./1_acl_vault.sh
+```
+
+### Cleanup
 Note: you may get an error message during destroy that the disks do not exist. This is because the disks are set to auto delete by default when the instance is deleted. 
 ```
 terraform destroy
