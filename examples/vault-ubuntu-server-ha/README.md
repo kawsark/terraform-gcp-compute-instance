@@ -55,13 +55,14 @@ vault status
 ### (Optional) ACL steps
 This repo includes 3 scripts to enable Consul ACL tokens with a default deny policy. The manual steps to run them are shown below. These can potentially be automated via Configuration management.
 
-- Run the [0_acl_bootstrap.sh](scripts/0_acl_bootstrap.sh) script on the consul-0 node. Example commands are below. This will bootstrap the ACL system, create 3 policies, and provide the bootstrap ACL token.
+1. Run the [0_acl_bootstrap.sh](scripts/0_acl_bootstrap.sh) script on the consul-0 node. Example commands are below. This will bootstrap the ACL system, create 3 policies, and provide the bootstrap ACL token.
+Note: the `/opt/consul/consul.txt` file will contain the ACL bootstrap token.
 ```
 gcloud compute --project "<project-name>" ssh --zone "us-east1-b" "consul-0"
 ./0_acl_bootstrap.sh
 ```
 
-- Run the [1_acl_consul.sh](scripts/1_acl_consul.sh) script on the remaining Consul server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
+2. Run the [1_acl_consul.sh](scripts/1_acl_consul.sh) script on the remaining Consul server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
 ```
 # consul-1 server
 gcloud compute --project "<project-name>" ssh --zone "us-east1-c" "consul-1"
@@ -74,7 +75,7 @@ export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
 ./1_acl_consul.sh
 ```
 
-- Run the [2_acl_vault.sh](scripts/2_acl_vault.sh) script on Vault server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
+3. Run the [2_acl_vault.sh](scripts/2_acl_vault.sh) script on Vault server nodes. Please export the bootstrap token prior to running the script. Example commands are below. 
 ```
 # vault-0 server
 gcloud compute --project "<project-name>" ssh --zone "us-east1-b" "vault-0"
