@@ -3,7 +3,7 @@ resource "random_id" "consul_encrypt" {
 }
 
 module "root_tls_self_signed_ca" {
-   source = "github.com/hashicorp-modules/tls-self-signed-cert"
+  source = "github.com/hashicorp-modules/tls-self-signed-cert"
 
   name              = "${var.consul_dc}-root"
   ca_common_name    = "${var.common_name}"

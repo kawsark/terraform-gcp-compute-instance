@@ -9,27 +9,27 @@ variable "gcp_region" {
 
 variable "vault_license" {
   description = "Optionally enter a Vault Enterprise license here. Relevant when using enterprise vault_url."
-  default = "asdf"
+  default     = "asdf"
 }
 
 variable "consul_license" {
   description = "Optionally enter a Consul Enterprise license here. Relevant when using enterprise consul_url."
-  default = "asdf"
+  default     = "asdf"
 }
 
 variable "vault_url" {
   description = "enter a Vault download URL here"
-  default = "https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip"
 }
 
 variable "consul_url" {
   description = "enter a Consul download URL here"
-  default = "https://releases.hashicorp.com/consul/1.5.3/consul_1.5.3_linux_amd64.zip"
+  default     = "https://releases.hashicorp.com/consul/1.5.3/consul_1.5.3_linux_amd64.zip"
 }
 
 variable "image" {
   description = "An OS image to provision: https://cloud.google.com/compute/docs/images#os-compute-support"
-  default = "ubuntu-os-cloud/ubuntu-1604-lts"
+  default     = "ubuntu-os-cloud/ubuntu-1604-lts"
 }
 
 variable "owner" {
@@ -55,12 +55,12 @@ variable "environment" {
 # TLS related variables
 variable "common_name" {
   description = "A CN for CA and generated certificates"
-  default = "therealk.com"
+  default     = "therealk.com"
 }
 
 variable "organization_name" {
   description = "A OU for CA and generated certificates"
-  default = "research"
+  default     = "research"
 }
 
 # KMS related variables
@@ -71,5 +71,5 @@ variable "key_ring" {
 
 variable "crypto_key" {
   description = "Key in Cloud KMS key ring for auto unseal"
-  default = "vault-key"
+  default     = "vault-key"
 }

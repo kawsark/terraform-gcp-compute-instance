@@ -1,4 +1,4 @@
-data "google_compute_default_service_account" "default" { }
+data "google_compute_default_service_account" "default" {}
 # Use existing keyring
 data "google_kms_key_ring" "key_ring" {
   project  = "${var.gcp_project}"
@@ -8,8 +8,8 @@ data "google_kms_key_ring" "key_ring" {
 
 # Use existing key
 data "google_kms_crypto_key" "crypto_key" {
-  name            = "${var.crypto_key}"
-  key_ring        = "${data.google_kms_key_ring.key_ring.self_link}"
+  name     = "${var.crypto_key}"
+  key_ring = "${data.google_kms_key_ring.key_ring.self_link}"
 }
 
 # Create a KMS key ring
@@ -29,7 +29,7 @@ data "google_kms_crypto_key" "crypto_key" {
 # Add the service account to the Keyring
 resource "google_kms_key_ring_iam_binding" "vault_iam_kms_binding" {
   key_ring_id = "${data.google_kms_key_ring.key_ring.id}"
-  role = "roles/owner"
+  role        = "roles/owner"
 
   members = [
     "serviceAccount:${data.google_compute_default_service_account.default.email}",
