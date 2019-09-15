@@ -1,4 +1,4 @@
-# This repo directory is not maintained and has been moved to [https://github.com/kawsark/terraform-gcp-vault](https://github.com/kawsark/terraform-gcp-vault)
+## This repo directory is not maintained and has been moved to [https://github.com/kawsark/terraform-gcp-vault](https://github.com/kawsark/terraform-gcp-vault)
 
 ## vault-server-ha
 This is an example showing how to use `terraform-gcp-compute-instance` module to provision a Vault and Consul cluster.
