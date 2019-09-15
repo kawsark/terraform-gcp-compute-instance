@@ -4,8 +4,7 @@ provider "google" {
 }
 
 module "consul-cluster" {
-  #source = "github.com/kawsark/terraform-gcp-compute-instance"
-  source = "../../"
+  source = "./google_compute_instance"
   image  = "${var.image}"
 
   tags = ["consul-${var.gcp_project}-${var.consul_dc}"]
@@ -29,8 +28,7 @@ module "consul-cluster" {
 }
 
 module "vault" {
-  #source = "github.com/kawsark/terraform-gcp-compute-instance"
-  source = "../../"
+  source = "./google_compute_instance"
   image  = "${var.image}"
 
   tags = ["consul-${var.gcp_project}-${var.consul_dc}"]

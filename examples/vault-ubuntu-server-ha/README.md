@@ -1,3 +1,5 @@
+** This repo directory is not maintained and has been moved to [https://github.com/kawsark/terraform-gcp-vault](https://github.com/kawsark/terraform-gcp-vault) **
+
 ## vault-server-ha
 This is an example showing how to use `terraform-gcp-compute-instance` module to provision a Vault and Consul cluster.
 **Important:** This code does not implement all of the [Vault production hardening recommendations](https://learn.hashicorp.com/vault/operations/production-hardening) and therefore should not be used in production.
@@ -92,7 +94,7 @@ export CONSUL_HTTP_ADDR=<bootstrap-acl-token>
 Note: you may get an error message during destroy that the disks do not exist. This is because the disks are set to auto delete by default when the instance is deleted. 
 ```
 terraform destroy
-unset TF_VAR_gcp_credentials
+unset GOOGLE_CREDENTIALS
 unset TF_VAR_gcp_project
 rm *.pem
 ```
