@@ -3,7 +3,7 @@ This Terraform configuration provisions a compute instance in Google Cloud Platf
 
 ### Notes:
 - Provider configuration variables (required):
-  - GCP credentials: please set `gcp_credentials` variable with contents of service account json file.
+  - GCP credentials: please set `GOOGLE_CREDENTIALS` environment variable with contents of service account json file. Note: please remove and line breaks from the file
   - GCP project: please set `gcp_project` variable with gcp project name.
 
 - By default, this configuration provisions a compute instance from image debian-cloud/debian-8 with machine type t2.micro in the us-east1 region. These can be adjusted as below:
@@ -17,3 +17,4 @@ This Terraform configuration provisions a compute instance in Google Cloud Platf
 - This configuration can also be used as a module as shown under examples:  
   - [example-centos-lamp-server](examples/example-centos-lamp-server/)
   - [ubuntu-vault-server](examples/vault-ubuntu-server/)
+  - [microk8s](examples/microk8s)
