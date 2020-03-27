@@ -23,12 +23,13 @@ echo "[Startup] - Installing microk8s"
 sudo snap install microk8s --classic
 
 echo "[Startup] - Enable addons"
-microk8s.enable dashboard dns
+microk8s.enable dashboard dns storage
 
 echo "[Startup] - Waiting for microk8s to complete with 300s timeout"
 sudo microk8s.kubectl config view --raw > /home/ubuntu/microk8s.yaml
 chown ubuntu:ubuntu /home/ubuntu/microk8s.yaml
 sudo usermod -a -G microk8s ubuntu
+echo "alias kubectl=microk8s.kubectl" | sudo tee -a /home/ubuntu/.bashrc
 microk8s.status --wait-ready --timeout 300
 
 echo "[Startup] - microk8s.status --wait-ready completed"
