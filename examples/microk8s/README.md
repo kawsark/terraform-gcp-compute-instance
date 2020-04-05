@@ -17,23 +17,27 @@ terraform get -update=true
 terraform plan
 terraform apply
 ```
-- Run SSH Tunnel to allow `kubectl` commands to run locally
+
+- Setup Kubectl locally
+Note: if you get an error: `scp: /home/ubuntu/microk8s.yaml: No such file or directory`, please wait a few minutes to complete initialization.
+The `microk8s.yaml` file with external IP is written as part of the startup process.
+```
+# SCP the kubeconfig file (microk8s.kubectl config view --raw)
+ip=$(terraform output -json external_ip | jq -r '.[0]')
+scp -i ./private_key.pem ubuntu@${ip}:/home/ubuntu/microk8s.yaml ./microk8s.yaml
+export KUBECONFIG=./microk8s.yaml
+kubectl get nodes
+```
+
+- (Optional) SSH into instance
 ```
 # Save private key
 rm -f ./private_key.pem
 terraform output private_key > ./private_key.pem && chmod 400 ./private_key.pem
 
-# Export ip address and connect via SSH Tunnel (Important: use the -L flag to port format 16443)
+# Export ip address and connect via SSH
 ip=$(terraform output -json external_ip | jq -r '.[0]')
-ssh -i ./private_key.pem -L 16443:127.0.0.1:16443 ubuntu@${ip}
-```
-
-- Setup Kubectl locally in another terminal window
-```
-# SCP the kubeconfig file (microk8s.kubectl config view --raw)
-scp -i ./private_key.pem ubuntu@${ip}:/home/ubuntu/microk8s.yaml ./microk8s.yaml
-export KUBECONFIG=./microk8s.yaml
-kubectl get nodes
+ssh -i ./private_key.pem ubuntu@${ip}
 ```
 
 - Cleanup:
@@ -42,4 +46,3 @@ terraform destroy
 unset GOOGLE_CREDENTIALS
 unset TF_VAR_gcp_project
 ```
-
