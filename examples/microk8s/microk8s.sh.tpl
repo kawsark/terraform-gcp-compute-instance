@@ -33,6 +33,7 @@ microk8s.status --wait-ready --timeout 300
 echo "[Startup] - microk8s.status --wait-ready completed"
 
 echo "[Startup] - updating public_ip for CA and restarting"
+# Reference: https://github.com/ubuntu/microk8s/issues/421
 public_ip=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)
 sudo cp /var/snap/microk8s/current/certs/csr.conf.template /var/snap/microk8s/current/certs/csr.conf.template.backup
 cat /var/snap/microk8s/current/certs/csr.conf.template.backup | sed -e s/#MOREIPS/"IP.9 = $${public_ip}\n#MOREIPS"/g | sudo tee /var/snap/microk8s/current/certs/csr.conf.template
