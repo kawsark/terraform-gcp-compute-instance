@@ -35,10 +35,11 @@ sleep 10
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update
-sudo apt-get install vault consul jq -y
+sudo apt-get install vault consul terraform make jq -y
 
 vault --version
 consul --version
+terraform --version
 
 # clone the vault-guides repo
 echo "[Startup] - Clone git repo"
