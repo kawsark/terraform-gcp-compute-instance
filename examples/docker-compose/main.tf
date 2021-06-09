@@ -62,6 +62,6 @@ output "name" {
 output "private_key" {
   value = tls_private_key.pem.private_key_pem
   description = "The private key for logging onto the server"
-  sensitive   = false
+  sensitive   = true
 }
 
