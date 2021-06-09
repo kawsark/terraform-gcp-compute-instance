@@ -31,15 +31,24 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 sleep 10
 
+# Install binaries
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update
+sudo apt-get install vault consul jq -y
+
+vault --version
+consul --version
+
 # clone the vault-guides repo
 echo "[Startup] - Clone git repo"
 cd /home/ubuntu
 git clone https://github.com/hashicorp/vault-guides.git
-sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 cd vault-guides/operations/onboarding
 cd docker-compose/ && docker-compose up -d
 sleep 10
 cd scripts
 ./00-init.sh
 
+sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 echo "[Startup] - completed"
