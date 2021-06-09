@@ -1,7 +1,5 @@
-# microk8s server
-Example showing how to setup a MicroK8S server on Ubuntu
-- An example startup-script is added here for installing MicroK8S
-- A SSH Tunnel needs to be created in order to run `kubectl` locally (See [GH issue](https://github.com/ubuntu/microk8s/issues/421) )
+## Docker-compose server
+Creates a Ubuntu 18 server then clones the vault-guides repo. It then creates the Docker compose stack from `vault-guides/operations/onboarding/docker-compose/`.
 
 ### Steps:
 - Set Environment variables
