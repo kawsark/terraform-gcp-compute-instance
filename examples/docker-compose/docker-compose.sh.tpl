@@ -35,12 +35,11 @@ sleep 10
 echo "[Startup] - Clone git repo"
 cd /home/ubuntu
 git clone https://github.com/hashicorp/vault-guides.git
+sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 cd vault-guides/operations/onboarding
-cd docker-compose/ && docker compose up -detach
+cd docker-compose/ && docker-compose up -d
 sleep 10
 cd scripts
 ./00-init.sh
-
-sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 
 echo "[Startup] - completed"
