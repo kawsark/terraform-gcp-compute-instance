@@ -50,6 +50,6 @@ cd docker-compose/ && docker-compose up -d
 sleep 10
 cd scripts
 ./00-init.sh
-
+ln -s /home/ubuntu/vault-guides/operations/onboarding onboarding
 sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 echo "[Startup] - completed"
