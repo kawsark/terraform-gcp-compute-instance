@@ -34,7 +34,7 @@ sleep 10
 # clone the vault-guides repo
 echo "[Startup] - Clone git repo"
 cd /home/ubuntu
-git clone git@github.com:hashicorp/vault-guides.git
+git clone https://github.com/hashicorp/vault-guides.git
 cd vault-guides/operations/onboarding
 cd docker-compose/ && docker compose up -detach
 sleep 10
