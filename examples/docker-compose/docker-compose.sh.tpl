@@ -50,6 +50,15 @@ cd docker-compose/ && docker-compose up -d
 sleep 10
 cd scripts
 ./00-init.sh
-ln -s /home/ubuntu/vault-guides/operations/onboarding onboarding
+ln -s /home/ubuntu/vault-guides/operations/onboarding /home/ubuntu/onboarding
+
 sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
+
+# Install GitLab Runner CLI
+sudo curl -L --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
+sudo chmod +x /usr/local/bin/gitlab-runner
+sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+sudo gitlab-runner start
+echo "[Startup] - ready to register runner"
+
 echo "[Startup] - completed"
