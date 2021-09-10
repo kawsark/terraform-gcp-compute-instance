@@ -46,6 +46,8 @@ echo "[Startup] - Clone git repo"
 cd /home/ubuntu
 git clone https://github.com/hashicorp/vault-guides.git
 cd vault-guides/operations/onboarding
+git fetch
+git checkout onboarding_update_image
 cd docker-compose/ && docker-compose up -d
 sleep 10
 cd scripts
@@ -55,6 +57,8 @@ ln -s /home/ubuntu/vault-guides/operations/onboarding /home/ubuntu/onboarding
 sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 
 # Install GitLab Runner CLI
+# Using steps from: https://docs.gitlab.com/runner/install/linux-manually.html
+sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
 sudo curl -L --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
 sudo chmod +x /usr/local/bin/gitlab-runner
 sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
