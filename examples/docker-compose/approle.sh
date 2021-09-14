@@ -5,11 +5,19 @@ cd vault-guides/operations/onboarding/docker-compose/scripts
 export app_name=$1
 [[ -z $1 ]] && app_name=nginx
 
+
 echo "Exporting Role ID and Secret ID for app: $app_name"
 
 export VAULT_ADDR=http://localhost:8200
 # This exports VAULT_ADDR and VAULT_TOKEN based on initialization output in vault.txt
 export VAULT_TOKEN=$(cat vault.txt | jq -r '.root_token')
+
+# Run terraform to create configurations
+echo "Running terraform to create configurations"
+cd ../../terraform
+terraform init
+terraform plan
+terraform apply --auto-approve
 
 # Wait until approle auth is mounted
 export approle=$(vault auth list | grep approle)
@@ -24,14 +32,16 @@ echo "Approle Auth mount detected, waiting 10 seconds and proceeding with role a
 sleep 10
 
 # Export role and secret IDs for apps
-cd ../vault-agent
-vault read -format=json auth/approle/role/$app_name/role-id \
-  | jq -r .data.role_id \
-  | tee $app_name-role_id
+cd ../docker-compose/vault-agent
 
-vault write -format=json -f auth/approle/role/$app_name/secret-id \
-  | jq -r .data.secret_id \
-  | tee $app_name-secret_id
+# Approle Role ID and Secret ID should already be present from running terraform
+#vault read -format=json auth/approle/role/$app_name/role-id \
+#  | jq -r .data.role_id \
+#  | tee $app_name-role_id
+
+#vault write -format=json -f auth/approle/role/$app_name/secret-id \
+#  | jq -r .data.secret_id \
+#  | tee $app_name-secret_id
 
 # Restart vault agent
 docker restart vault-agent
@@ -55,6 +65,13 @@ if [[ ${ARM_SUBSCRIPTION_ID} != "" ]] && [[ -d "/home/ubuntu/vault-azure-demo" ]
   cd $HOME/vault-azure-demo/
   source scripts/set_vars.sh
   make 1_validate
+  #make 2_ assign_permissions.sh
   make 3_azure_secrets_engine
   make 4_azure_role
+
+  echo "Creating dynamic credential"
+  vault read ${AZ_SECRET_PATH}/creds/${RESOURCE_GROUP}-role
+
+  echo "revoking all dynamic credentials from this secret engine"
+  vault lease revoke -prefix ${AZ_SECRET_PATH}
 fi

@@ -6,13 +6,12 @@ if [[ ${ARM_SUBSCRIPTION_ID} == "" ]]; then
   sleep 10
 fi
 
-echo "Download state file"
-[[ -z ${url} ]] && echo "Please set the state file download URL: export url=<statefule>" && exit 0
+[[ ${url} == "" ]] && echo "Please set the state file download URL: export url=<statefule>" && exit 0
 
 echo "Updating firewall rule to access from current IP"
 gcloud compute firewall-rules update allow-all-homeip --source-ranges="$(curl -s http://whatismyip.akamai.com)/32"
 
-export url=$1
+echo "Downloading state file"
 wget -O terraform.tfstate "${url}"
 rm -f ./private_key.pem && terraform output private_key > ./private_key.pem && chmod 400 ./private_key.pem
 pem=./private_key.pem
@@ -24,12 +23,11 @@ scp -i ${pem} ./approle.sh ubuntu@${ip}:/home/ubuntu/approle.sh
 
 echo "Getting vault.txt file from server"
 scp -i ${pem} ubuntu@${ip}:/home/ubuntu/vault-guides/operations/onboarding/docker-compose/scripts/vault.txt ./vault.txt
-cat vault.txt
 
-if [[ ${ARM_SUBSCRIPTION_ID} == "" ]]; then
+if [[ ${ARM_SUBSCRIPTION_ID} != "" ]]; then
   echo "Setting up Azure demo"
   echo "Adding ARM_SUBSCRIPTION_ID to profile"
-  echo "export ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}" >> /home/ubuntu/.bash_profile
+  ssh -i ${pem} ubuntu@${ip} "echo export ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID} >> /home/ubuntu/.bash_profile; chmod +x /home/ubuntu/.bash_profile"
   echo "Cloning azure-demo repo to server"
   ssh -i ${pem} ubuntu@${ip} "git clone https://gitlab.com/kawsark/vault-azure-demo.git"
   scp -i ${pem} ./vault-demo.json ubuntu@${ip}:/home/ubuntu/vault-azure-demo/vault-demo.json
