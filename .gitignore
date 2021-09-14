@@ -12,6 +12,11 @@ backend.tf
 # .tfvars files
 *.tfvars
 
+# Demo files
+vault-demo.json
+vault.txt
+private_key.pem
+
 ### Emacs ###
 # -*- mode: gitignore; -*-
 *~

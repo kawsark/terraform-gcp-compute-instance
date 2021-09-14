@@ -56,6 +56,15 @@ ln -s /home/ubuntu/vault-guides/operations/onboarding /home/ubuntu/onboarding
 
 sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 
+# Set VAULT_ADDR
+echo "export VAULT_ADDR=http://127.0.0.1:8200" >> /etc/profile
+
+# Install Terraform helper
+git clone git@github.com:hashicorp-community/tf-helper.git
+cd tfh-helper/tfh/bin
+echo "export PATH=$PWD:\$PATH" >> /etc/profile
+cd
+
 # Install GitLab Runner CLI
 # Using steps from: https://docs.gitlab.com/runner/install/linux-manually.html
 sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash

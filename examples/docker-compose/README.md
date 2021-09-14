@@ -18,8 +18,8 @@ terraform apply
 
 - If using the VCS driven run, please download the terraform.tfstate file locally
 
-- (Optional) SSH into instance
-```
+- (Optional) SSH into instance and configure Vault
+```bash
 # Save private key
 rm -f ./private_key.pem
 terraform output private_key > ./private_key.pem && chmod 400 ./private_key.pem
@@ -28,12 +28,16 @@ terraform output private_key > ./private_key.pem && chmod 400 ./private_key.pem
 ip=$(terraform output -json external_ip | jq -r '.[0]')
 ssh -i ./private_key.pem ubuntu@${ip}
 
-# Get root token and unseal key
-cat onboarding/docker-compose/scripts/vault.txt
+# Get root token and unseal key from onboarding/docker-compose/scripts/vault.txt
+export VAULT_ADDR=http://localhost:8200
+export VAULT_TOKEN=$(cat $HOME/onboarding/docker-compose/scripts/vault.txt | jq -r '.root_token')
+export unseal_key=$(cat $HOME/onboarding/docker-compose/scripts/vault.txt | jq -r '.unseal_keys_hex')
+vault status
+vault token lookup
 ```
 
 - Cleanup:
-```
+```bash
 terraform destroy
 unset GOOGLE_CREDENTIALS
 unset TF_VAR_gcp_project
@@ -42,7 +46,7 @@ unset TF_VAR_gcp_project
 ### GitLab Runner service and registration
 This repo also installs the GitLab Runner binary and the gitlab-runner service using the [documentation on GitLab](https://docs.gitlab.com/runner/install/linux-manually.html). Use the commands below to check service status and register it.
 - Note: you will need the Runner Registration Token from your GitLab server.
-```
+```bash
 # Check status
 sudo systemctl status gitlab-runner
 
