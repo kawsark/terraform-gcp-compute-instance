@@ -53,6 +53,7 @@ sleep 10
 cd scripts
 ./00-init.sh
 ln -s /home/ubuntu/vault-guides/operations/onboarding /home/ubuntu/onboarding
+ln -s /home/ubuntu/vault-guides//operations/onboarding/docker-compose/scripts/vault.txt /home/ubuntu/vault.txt
 
 sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 
@@ -60,9 +61,9 @@ sudo chown ubuntu:ubuntu -R /home/ubuntu/vault-guides
 echo "export VAULT_ADDR=http://127.0.0.1:8200" >> /etc/profile
 
 # Install Terraform helper
-git clone git@github.com:hashicorp-community/tf-helper.git
-cd tfh-helper/tfh/bin
-echo "export PATH=$PWD:\$PATH" >> /etc/profile
+git clone https://github.com/hashicorp-community/tf-helper.git
+cd tf-helper/tfh/bin
+echo "export PATH=$PWD:\$PATH" | tee -a /etc/profile
 cd
 
 # Install GitLab Runner CLI

@@ -13,6 +13,8 @@ backend.tf
 *.tfvars
 
 # Demo files
+*.json
+.terraform.lock.hcl
 vault-demo.json
 vault.txt
 private_key.pem

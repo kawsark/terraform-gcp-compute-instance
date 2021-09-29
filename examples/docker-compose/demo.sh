@@ -24,15 +24,6 @@ scp -i ${pem} ./approle.sh ubuntu@${ip}:/home/ubuntu/approle.sh
 echo "Getting vault.txt file from server"
 scp -i ${pem} ubuntu@${ip}:/home/ubuntu/vault-guides/operations/onboarding/docker-compose/scripts/vault.txt ./vault.txt
 
-if [[ ${ARM_SUBSCRIPTION_ID} != "" ]]; then
-  echo "Setting up Azure demo"
-  echo "Adding ARM_SUBSCRIPTION_ID to profile"
-  ssh -i ${pem} ubuntu@${ip} "echo export ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID} >> /home/ubuntu/.bash_profile; chmod +x /home/ubuntu/.bash_profile"
-  echo "Cloning azure-demo repo to server"
-  ssh -i ${pem} ubuntu@${ip} "git clone https://gitlab.com/kawsark/vault-azure-demo.git"
-  scp -i ${pem} ./vault-demo.json ubuntu@${ip}:/home/ubuntu/vault-azure-demo/vault-demo.json
-fi
-
 echo "Executing Approle script on server"
 ssh -i ${pem} ubuntu@${ip} "chmod +x /home/ubuntu/approle.sh; /home/ubuntu/approle.sh"
 

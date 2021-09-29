@@ -57,21 +57,3 @@ VAULT_TOKEN=${TOKEN} vault token lookup
 VAULT_TOKEN=${TOKEN} vault kv get kv/${app_name}/static
 VAULT_TOKEN=${TOKEN} vault read postgres/creds/${app_name}
 
-# Check if Azure demo setup is needed
-# See: https://medium.com/hashicorp-engineering/onboarding-the-azure-secrets-engine-for-vault-f09d48c68b69
-source /home/ubuntu/.bash_profile
-if [[ ${ARM_SUBSCRIPTION_ID} != "" ]] && [[ -d "/home/ubuntu/vault-azure-demo" ]]; then
-  echo "Executing Azure demo setup"
-  cd $HOME/vault-azure-demo/
-  source scripts/set_vars.sh
-  make 1_validate
-  #make 2_ assign_permissions.sh
-  make 3_azure_secrets_engine
-  make 4_azure_role
-
-  echo "Creating dynamic credential"
-  vault read ${AZ_SECRET_PATH}/creds/${RESOURCE_GROUP}-role
-
-  echo "revoking all dynamic credentials from this secret engine"
-  vault lease revoke -prefix ${AZ_SECRET_PATH}
-fi

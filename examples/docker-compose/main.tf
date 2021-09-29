@@ -17,6 +17,10 @@ variable gcp_region {
   default = "us-east1"
 }
 
+variable network_name {
+  default = "default"
+}
+
 data "template_file" "startup_script" {
   template = file("${path.module}/docker-compose.sh.tpl")
   vars = {
@@ -34,7 +38,7 @@ module "docker-compose-server" {
   source = "../../"
   labels = {
     environment = "dev"
-    app         = "consul"
+    app         = "vault"
     ttl         = "24"
     owner       = "kawsar-at-hashicorp"
   }
@@ -65,3 +69,16 @@ output "private_key" {
   sensitive   = true
 }
 
+resource "google_compute_firewall" "vault_rules" {
+  project     = var.gcp_project
+  name        = "vault-firewall-rule"
+  network     = var.network_name
+  description = "Creates firewall rule targeting tagged instances"
+
+  allow {
+    protocol  = "tcp"
+    ports     = ["80", "8080", "8200"]
+  }
+
+  target_tags = ["vault"]
+}
