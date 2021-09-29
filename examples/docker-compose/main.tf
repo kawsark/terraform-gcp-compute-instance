@@ -86,6 +86,6 @@ resource "google_compute_firewall" "vault_rules" {
 
   source_ranges = var.source_ranges
 
-  target_tags = ["vault"]
+  #target_tags = ["vault"]
 }
 
