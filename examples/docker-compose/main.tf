@@ -5,6 +5,11 @@ provider "google" {
   region      = var.gcp_region
 }
 
+variable "source_ranges" {
+  description = "IP Ranges(s) to open up for Firewall rule, replace with your IP addresses"
+  default = ["1.1.1.1/32"]
+}
+
 variable "gcp_project" {
   description = "Name of GCP project"
 }
@@ -76,9 +81,11 @@ resource "google_compute_firewall" "vault_rules" {
   description = "Creates firewall rule targeting tagged instances"
 
   allow {
-    protocol  = "tcp"
-    ports     = ["80", "8080", "8200"]
+    protocol = "all"
   }
+
+  source_ranges = var.source_ranges
 
   target_tags = ["vault"]
 }
+
