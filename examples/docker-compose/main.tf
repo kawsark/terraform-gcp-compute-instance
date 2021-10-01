@@ -106,6 +106,10 @@ resource "google_compute_firewall" "vault_rules" {
     ports    = ["8200", "8201"]
   }
 
+  log_config {
+    metadata = "INCLUDE_ALL_METADATA"
+  }
+
   source_ranges = var.vault_source_ranges
 
 }
