@@ -18,6 +18,7 @@ backend.tf
 vault-demo.json
 vault.txt
 private_key.pem
+*.backup
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
