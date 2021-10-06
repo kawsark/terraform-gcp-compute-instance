@@ -51,7 +51,7 @@ module "docker-compose-server" {
     app         = "vault"
     ttl         = "24"
     owner       = "kawsar-at-hashicorp"
-    DoNotDelete = "True"
+    donotdelete = "True"
   }
   gcp_project    = var.gcp_project
   gcp_region     = var.gcp_region
