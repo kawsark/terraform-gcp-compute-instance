@@ -17,8 +17,20 @@ terraform apply
 ```
 
 - If using the VCS driven run, please download the terraform.tfstate file locally
+```bash
+export url=<state file url>
+wget -O terraform.tfstate ${url}
+```
 
-- (Optional) SSH into instance and configure Vault
+### (Optional) SSH into instance:
+- Scripted: Use the included ssh.sh script
+```bash
+export url=<state file url>
+./ssh.sh
+```
+
+Alternatively, you can use the commands below.
+- Manual: SSH into instance and configure Vault
 ```bash
 # Save private key
 rm -f ./private_key.pem

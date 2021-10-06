@@ -4,6 +4,7 @@ microk8s.yaml
 **/.terraform/*
 backend.tf
 *pem
+external_ip
 
 # .tfstate files
 *.tfstate
