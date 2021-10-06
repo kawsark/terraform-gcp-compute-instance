@@ -51,6 +51,7 @@ module "docker-compose-server" {
     app         = "vault"
     ttl         = "24"
     owner       = "kawsar-at-hashicorp"
+    DoNotDelete = "True"
   }
   gcp_project    = var.gcp_project
   gcp_region     = var.gcp_region
@@ -88,6 +89,10 @@ resource "google_compute_firewall" "dev_workstation_rules" {
 
   allow {
     protocol = "all"
+  }
+
+  log_config {
+    metadata = "INCLUDE_ALL_METADATA"
   }
 
   source_ranges = var.source_ranges
